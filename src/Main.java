@@ -1,4 +1,4 @@
-
+import java.util.Arrays;
 
 public class Main {
 
@@ -23,6 +23,15 @@ public class Main {
         System.out.println(value);
         System.out.println(a.containsKey("lol"));
         System.out.println(a.containsKey("lolff"));
+
+        System.out.println(Arrays.toString(a.getKeys()));
+        System.out.println(Arrays.toString(a.getKeysValues()));
+
+        a.remove("nick");
+
+        System.out.println(Arrays.toString(a.getKeys()));
+        System.out.println(Arrays.toString(a.getKeysValues()));
+
     }
 }
 

@@ -69,6 +69,11 @@ class HashMap<K,V> {
         return null;
     }
 
+    /**
+     * Method for elements removing.
+     * @param key
+     * @throws Exception
+     */
     public void remove(K key) throws Exception {
         previousKeys = keys;
         previousValues = values;
@@ -116,6 +121,14 @@ class HashMap<K,V> {
         else {
             throw new Exception("Key doesn't exist");
         }
+    }
+
+    public Object[] getKeys(){
+        return keys;
+    }
+
+    public Object[] getKeysValues(){
+        return values;
     }
 
     /**
