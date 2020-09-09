@@ -2,7 +2,7 @@
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         java.util.HashMap<String, Integer> b = new java.util.HashMap<>();
         HashMap<String, Integer> a = new HashMap<>();
         a.put("lol", 2);
@@ -19,8 +19,8 @@ public class Main {
 //        a.get();
         a.put("Green", 123);
 //        System.out.println("--------");
-        a.get();
-
+        Integer value = a.get("lol");
+        System.out.println(value);
     }
 }
 
