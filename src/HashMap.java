@@ -1,4 +1,3 @@
-import java.lang.invoke.VarHandle;
 
 class HashMap<K,V> {
 
@@ -34,15 +33,55 @@ class HashMap<K,V> {
             }
         }
 
-        keys[capacity - 1] = key;
-        values[capacity - 1] = value;
+        if (isExistingKey(key)) {
+
+            changeValue(key,value);
+            capacity--;
+
+        } else {
+            keys[capacity - 1] = key;
+            values[capacity - 1] = value;
+        }
 
         counter = 0;
     }
 
-    public  void get(){
-        for(int i = 0; i<keys.length; i++){
+
+    public void get() {
+        for (int i = 0; i < keys.length; i++) {
             System.out.println(keys[i] + " " + values[i]);
+        }
+    }
+
+    private void changeValue(Object value) {
+
+    }
+
+    private boolean isExistingKey(Object key) {
+        int counter = 0;
+        if (keys.length > 1) {
+
+            for (Object a : keys) {
+                if (a != null) {
+                    if (a.equals(key)) {
+                        return true;
+                    }
+                }
+                counter++;
+            }
+        }
+        return false;
+    }
+
+    private void changeValue(Object key, Object value) {
+        int counter = 0;
+        for (Object a : keys) {
+            if (a != null) {
+                if (a.equals(key)) {
+                    values[counter] = value;
+                }
+            }
+            counter++;
         }
     }
 }
