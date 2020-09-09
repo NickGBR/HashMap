@@ -1,3 +1,5 @@
+import java.util.Arrays;
+import java.util.Objects;
 
 class HashMap<K,V> {
     private boolean isExistingKey;
@@ -82,8 +84,8 @@ class HashMap<K,V> {
         int counter1 = 0;
         int removingElement=0;
 
-        if(isExistingKey) {
-
+        if(isExistingKey(key)) {
+            capacity--;
             for(Object a: keys) {
 
                 if(a.equals(key)) {
@@ -96,8 +98,8 @@ class HashMap<K,V> {
 
             counter = 0;
 
-            keys = new Object[capacity - 1];
-            values = new Object[capacity - 1];
+            keys = new Object[capacity];
+            values = new Object[capacity];
 
             for(Object a : previousKeys) {
                 if(counter!=removingElement){
@@ -127,7 +129,7 @@ class HashMap<K,V> {
         return keys;
     }
 
-    public Object[] getKeysValues(){
+    public Object[] getValues(){
         return values;
     }
 
@@ -183,5 +185,47 @@ class HashMap<K,V> {
             }
             counter++;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        int samePairs = 0;
+        int counterA = 0;
+        int counterB = 0;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HashMap<?, ?> hashMap = (HashMap<?, ?>) o;
+        if(this.hashCode()!=o.hashCode()) return false;
+
+        Object[] keys = ((HashMap<?, ?>) o).getKeys();
+        Object[] values = ((HashMap<?, ?>) o).getValues();
+
+        for(Object a : this.keys){
+            counterB=0;
+            for(Object b : keys){
+                if(a.equals(b)){
+                    if(this.values[counterA].equals(values[counterB])){
+                        samePairs++;
+                    }
+                }
+                counterB++;
+            }
+            counterA++;
+        }
+
+
+        return samePairs==keys.length;
+    }
+
+    @Override
+    public int hashCode() {
+        if(keys!=null && values!=null) {
+            int result = Objects.hash(capacity, counter);
+            result = 31 * result + keys.length;
+            result = 31 * result + values.length;
+            return result;
+        }
+        else return 0;
     }
 }
