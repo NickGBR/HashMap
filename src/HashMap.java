@@ -1,6 +1,6 @@
 
 class HashMap<K,V> {
-    private boolean isExistinKey;
+    private boolean isExistingKey;
     private int capacity = 0;
     private int counter = 0;
     private Object[] keys;
@@ -10,9 +10,9 @@ class HashMap<K,V> {
 
     public void put(K key, V value) {
 
-        isExistinKey = isExistingKey(key);
+        isExistingKey = isExistingKey(key);
 
-        if(!isExistinKey) {
+        if(!isExistingKey) {
             previousKeys = keys;
             previousValues = values;
 
@@ -45,6 +45,13 @@ class HashMap<K,V> {
         counter = 0;
     }
 
+    /**
+     * Method for getting value.
+     * @param key
+     * @return
+     * @throws Exception
+     */
+
 
     public V get(K key) throws Exception {
         int counter = 0;
@@ -57,9 +64,69 @@ class HashMap<K,V> {
             }
         }
         else {
-            throw new Exception("Key doesen't exist");
+            throw new Exception("Key doesn't exist");
         }
         return null;
+    }
+
+    public void remove(K key) throws Exception {
+        previousKeys = keys;
+        previousValues = values;
+
+        int counter = 0;
+        int counter1 = 0;
+        int removingElement=0;
+
+        if(isExistingKey) {
+
+            for(Object a: keys) {
+
+                if(a.equals(key)) {
+                    removingElement = counter;
+                    break;
+                }
+
+                counter++;
+            }
+
+            counter = 0;
+
+            keys = new Object[capacity - 1];
+            values = new Object[capacity - 1];
+
+            for(Object a : previousKeys) {
+                if(counter!=removingElement){
+                    keys[counter1]=previousKeys[counter];
+                    counter1++;
+                }
+                counter++;
+            }
+
+            counter=0;
+            counter1=0;
+
+            for(Object a : previousValues) {
+                if(counter!=removingElement){
+                    values[counter1]=previousValues[counter];
+                    counter1++;
+                }
+                counter++;
+            }
+        }
+        else {
+            throw new Exception("Key doesn't exist");
+        }
+    }
+
+    /**
+     * Method for checking key existing
+     * @param key
+     * @return
+     */
+    public boolean containsKey(K key){
+        boolean isExistingKey;
+        isExistingKey = isExistingKey(key);
+        return isExistingKey;
     }
 
     /**

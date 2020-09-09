@@ -21,6 +21,8 @@ public class Main {
 //        System.out.println("--------");
         Integer value = a.get("lol");
         System.out.println(value);
+        System.out.println(a.containsKey("lol"));
+        System.out.println(a.containsKey("lolff"));
     }
 }
 
