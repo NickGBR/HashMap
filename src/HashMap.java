@@ -1,4 +1,5 @@
-import java.util.Arrays;
+import Exceptions.OutOfKeyException;
+
 import java.util.Objects;
 
 class HashMap<K,V> {
@@ -55,7 +56,7 @@ class HashMap<K,V> {
      */
 
 
-    public V get(K key) throws Exception {
+    public V get(K key) throws OutOfKeyException {
         int counter = 0;
         if (isExistingKey(key)){
             for(Object a : keys){
@@ -66,17 +67,17 @@ class HashMap<K,V> {
             }
         }
         else {
-            throw new Exception("Key doesn't exist");
+            throw new OutOfKeyException("Key doesn't exist");
         }
         return null;
     }
 
     /**
-     * Method for elements removing.
+     * Method for keys deleting
      * @param key
-     * @throws Exception
+     * @throws OutOfKeyException
      */
-    public void remove(K key) throws Exception {
+    public void remove(K key) throws OutOfKeyException {
         previousKeys = keys;
         previousValues = values;
 
@@ -121,7 +122,7 @@ class HashMap<K,V> {
             }
         }
         else {
-            throw new Exception("Key doesn't exist");
+            throw new OutOfKeyException("Key doesn't exist");
         }
     }
 
@@ -155,7 +156,7 @@ class HashMap<K,V> {
         if(keys == null){
             return false;
         }
-        if (keys.length > 1) {
+        if (keys.length >= 1) {
 
             for (Object a : keys) {
                 if (a != null) {

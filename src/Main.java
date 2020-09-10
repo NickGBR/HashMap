@@ -6,14 +6,17 @@ public class Main {
         java.util.HashMap<String, Integer> b = new java.util.HashMap<>();
         HashMap<String, Integer> a = new HashMap<>();
         HashMap<String, Integer> d = new HashMap<>();
-        a.put("lol", 3);
-        a.put("lol2", 3);
-        d.put("lol2", 3);
-        d.put("lol",3);
-        d.put("lol",5);
-        d.put("lol",3);
-        System.out.println(a.equals(d));
-
+        d.put("2",2);
+        d.put("1",1);
+        d.put("3",1);
+        d.put("4",1);
+        d.put("5",1);
+        d.put("6",1);
+        System.out.println(d.containsKey("2"));
+        System.out.println(Arrays.toString(d.getKeys()));
+        d.remove("2");
+        d.remove("d");
+        System.out.println(Arrays.toString(d.getKeys()));
     }
 }
 
