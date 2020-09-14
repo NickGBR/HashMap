@@ -1,4 +1,4 @@
-package tests;
+package Tests;
 import exceptions.OutOfKeyException;
 import org.junit.After;
 import org.junit.Before;
