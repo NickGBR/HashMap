@@ -2,9 +2,10 @@ package mypackage;
 
 import exceptions.OutOfKeyException;
 
+import java.util.Map;
 import java.util.Objects;
 
-public class HashMap<K,V> {
+public class HashMap<K,V> implements Map<K,V> {
     private boolean isExistingKey;
     private int capacity = 0;
     private int counter = 0;
