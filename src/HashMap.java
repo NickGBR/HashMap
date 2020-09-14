@@ -1,10 +1,8 @@
-package mypackage;
-
-import exceptions.OutOfKeyException;
+import Exceptions.OutOfKeyException;
 
 import java.util.Objects;
 
-public class HashMap<K,V> {
+class HashMap<K,V> {
     private boolean isExistingKey;
     private int capacity = 0;
     private int counter = 0;

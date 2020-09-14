@@ -1,4 +1,4 @@
-package exceptions;
+package Exceptions;
 
 public class OutOfKeyException extends Exception {
     public OutOfKeyException(String msg){

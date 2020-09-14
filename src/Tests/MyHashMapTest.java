@@ -1,16 +1,19 @@
-package tests;
-import exceptions.OutOfKeyException;
+package Tests;
+
+import Exceptions.OutOfKeyException;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import mypackage.HashMap;
+
+import java.util.HashMap;
+
 import static org.junit.Assert.*;
 
 public class MyHashMapTest {
 
     @Before
     public void setUp() throws Exception {
-
     }
 
     @After
@@ -18,7 +21,7 @@ public class MyHashMapTest {
     }
 
     @Test
-    public void put() throws OutOfKeyException {
+    public void put() {
         HashMap<String, Integer> map = new HashMap<>();
         map.put("test",1);
         map.put("test1",2);
@@ -33,7 +36,7 @@ public class MyHashMapTest {
     }
 
     @Test
-    public void get() throws OutOfKeyException{
+    public void get() {
         HashMap<String, Integer> map = new HashMap<>();
         map.put("test",1);
         map.put("test1",2);
@@ -48,7 +51,7 @@ public class MyHashMapTest {
     }
 
     @Test
-    public void remove() throws OutOfKeyException {
+    public void remove() {
         HashMap<String, Integer> map = new HashMap<>();
         map.put("test",1);
         map.put("test1",2);
@@ -63,18 +66,16 @@ public class MyHashMapTest {
         int[] resAct = new int[]{map.get("test2"),map.get("test3"),map.get("test4")};
         assertArrayEquals(resExp,resAct);
 
+        map.remove("test2");
+        map.remove("test3");
         resExp = new int[]{7};
         resAct = new int[]{map.get("test4")};
         assertArrayEquals(resExp,resAct);
 
-        try {
-            map.remove("333");
-        }
-        catch (OutOfKeyException e){
-            String expectedMessage = e.getMessage();
-            String actualMessage = "Key doesn't exist";
-            assertTrue(expectedMessage.contains(actualMessage));
-        }
+        map.remove("test4");
+        map.remove("Nick");
+        map.remove("");
+
 
     }
 
@@ -103,36 +104,6 @@ public class MyHashMapTest {
 
     @Test
     public void equals() {
-        HashMap<Integer,Integer> one = new HashMap<>();
-        HashMap<Integer,Integer> two = new HashMap<>();
-        HashMap<Integer,Integer> three = new HashMap<>();
-        HashMap<Integer,Integer> empty = null;
-        String s = "String for testing";
-
-        one.put(1,1);
-        one.put(2,1);
-        one.put(3,1);
-
-        two.put(2,1);
-        two.put(3,1);
-        two.put(1,1);
-
-        three.put(1,1);
-        three.put(2,2);
-        three.put(3,3);
-        three.put(4,4);
-
-        assertTrue(one.equals(one));
-        assertTrue(one.equals(two));
-        assertTrue(two.equals(two));
-        assertTrue(three.equals(three));
-
-
-
-        assertFalse(one.equals(three));
-        assertFalse(one.equals(empty));
-        assertFalse(two.equals(three));
-        assertFalse(three.equals(s));
     }
 
 }
