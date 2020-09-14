@@ -5,7 +5,7 @@ import exceptions.OutOfKeyException;
 import java.util.Map;
 import java.util.Objects;
 
-public class HashMap<K,V> implements Map<K,V> {
+public class HashMap<K,V>implements Map<K,V> {
     private boolean isExistingKey;
     private int capacity = 0;
     private int counter = 0;
@@ -14,19 +14,29 @@ public class HashMap<K,V> implements Map<K,V> {
     private Object[] previousKeys;
     private Object[] previousValues;
 
-    public void put(K key, V value) {
 
-        isExistingKey = isExistingKey(key);
+    public V put(K key, V value) {
 
+        //Проверяем наличия ключа
+        isExistingKey = containsKey(key);
+
+        /*Если ключа не существует, то создаем новые массивы ключей и значений
+            увеличи размерность на 1 добавив новый ключ и значение.*/
         if(!isExistingKey) {
+
+            //Сохранием старые массивы ключей и значений.
             previousKeys = keys;
             previousValues = values;
 
+
             capacity++;
 
+            //Создаем новые массивы для зранения ключей и значений.
             keys = new Object[capacity];
             values = new Object[capacity];
 
+            /*В случае если массивы были проинициализированны, то переписываем старые значения
+            в расширенные массивы.*/
             if (previousKeys != null && previousValues != null) {
 
                 for (Object a : previousKeys) {
@@ -42,13 +52,18 @@ public class HashMap<K,V> implements Map<K,V> {
                     counter++;
                 }
             }
+
+            //Добавлем новые значение в массивы ключей и значений
             keys[capacity - 1] = key;
             values[capacity - 1] = value;
         }
         else {
-            changeValue(key, value);
+            /*В случае дубликата ключа, меняем значение ключа
+                    и возращаем старое значение.*/
+            return (V)changeValue(key, value);
         }
         counter = 0;
+        return null;
     }
 
     /**
@@ -57,11 +72,10 @@ public class HashMap<K,V> implements Map<K,V> {
      * @return
      * @throws Exception
      */
-
-
-    public V get(K key) throws OutOfKeyException {
+    @Override
+    public V get(Object key){
         int counter = 0;
-        if (isExistingKey(key)){
+        if (containsKey(key)){
             for(Object a : keys){
                 if(a.equals(key)){
                     return (V) values[counter];
@@ -70,7 +84,7 @@ public class HashMap<K,V> implements Map<K,V> {
             }
         }
         else {
-            throw new OutOfKeyException("Key doesn't exist");
+            return null;
         }
         return null;
     }
@@ -80,18 +94,22 @@ public class HashMap<K,V> implements Map<K,V> {
      * @param key
      * @throws OutOfKeyException
      */
-    public void remove(K key) throws OutOfKeyException {
+
+    @Override
+    public V remove(Object key){
         previousKeys = keys;
         previousValues = values;
 
         int counter = 0;
         int counter1 = 0;
         int removingElement=0;
+        V removedValue= null;
 
-        if(isExistingKey(key)) {
+        if(containsKey(key)) {
             capacity--;
             for(Object a: keys) {
 
+                //Находим индекс удаляемого эллимента
                 if(a.equals(key)) {
                     removingElement = counter;
                     break;
@@ -102,9 +120,11 @@ public class HashMap<K,V> implements Map<K,V> {
 
             counter = 0;
 
+            //Создаем новые массивы
             keys = new Object[capacity];
             values = new Object[capacity];
 
+            //Наполняем массивы, без удаленного эллимента
             for(Object a : previousKeys) {
                 if(counter!=removingElement){
                     keys[counter1]=previousKeys[counter];
@@ -121,12 +141,13 @@ public class HashMap<K,V> implements Map<K,V> {
                     values[counter1]=previousValues[counter];
                     counter1++;
                 }
+                else{
+                    removedValue = (V) a;
+                }
                 counter++;
             }
         }
-        else {
-            throw new OutOfKeyException("Key doesn't exist");
-        }
+        return removedValue;
     }
 
     public Object[] getKeys(){
@@ -137,25 +158,32 @@ public class HashMap<K,V> implements Map<K,V> {
         return values;
     }
 
+    @Override
+    public int size() {
+        return keys.length;
+    }
+
+    @Override
+    public void clear(){
+        keys = null;
+        values = null;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        if (values == null){
+            return true;
+        }
+        else return false;
+    }
+
     /**
      * Method for checking key existing
      * @param key
      * @return
      */
-    public boolean containsKey(K key){
-        boolean isExistingKey;
-        isExistingKey = isExistingKey(key);
-        return isExistingKey;
-    }
-
-    /**
-     * his method checks the same key existense.
-     * @param key
-     * @return
-     */
-
-    private boolean isExistingKey(Object key) {
-        int counter = 0;
+    @Override
+    public boolean containsKey(Object key){
         if(keys == null){
             return false;
         }
@@ -167,28 +195,33 @@ public class HashMap<K,V> implements Map<K,V> {
                         return true;
                     }
                 }
-                counter++;
             }
         }
         return false;
     }
 
     /**
-     * Method for changing value of key
+     * Меняет значение ключа на новое, возращает старое значение.
      * @param key
      * @param value
+     * @return oldValue
      */
 
-    private void changeValue(Object key, Object value) {
+    private Object changeValue(Object key, Object value) {
         int counter = 0;
+        Object oldValue = null;
+        /*Находим позицию ключе в массива ключей,
+            в случае совпадения меняем значение в этой позиции на новое.*/
         for (Object a : keys) {
             if (a != null) {
                 if (a.equals(key)) {
+                    oldValue = values[counter];
                     values[counter] = value;
                 }
             }
             counter++;
         }
+        return oldValue;
     }
 
     @Override
