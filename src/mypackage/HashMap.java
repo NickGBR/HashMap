@@ -5,7 +5,7 @@ import exceptions.OutOfKeyException;
 import java.util.Map;
 import java.util.Objects;
 
-public class HashMap<K,V>implements Map<K,V> {
+public class HashMap<K,V> {//implements Map<K,V> {
     private boolean isExistingKey;
     private int capacity = 0;
     private int counter = 0;
@@ -13,178 +13,146 @@ public class HashMap<K,V>implements Map<K,V> {
     private Object[] values;
     private Object[] previousKeys;
     private Object[] previousValues;
+    private Node<K,V>[] nodes = new Node[18];
 
+    @Override
+    public String toString() {
+        String result = "";
+
+        for (int i = 0; i<nodes.length;i++) {
+            Node element = nodes[i];
+            if (element != null) {
+
+                while (true) {
+
+                    if (element.getNextElement() != null) {
+                        result = result + element.getKey().toString() + " " + element.getValue().toString() + " | ";
+                        element = element.getNextElement();
+                    } else {
+                        result = result + element.getKey() + " " + element.getValue()  + " - bucket " + i + "\n";
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
 
     public V put(K key, V value) {
 
-        //Проверяем наличия ключа
-        isExistingKey = containsKey(key);
+        int position = getIndex(key, nodes.length);
+        Node newPair = new Node(key.hashCode(), key, value, null);
+        Node lastNode = nodes[position];
 
-        /*Если ключа не существует, то создаем новые массивы ключей и значений
-            увеличи размерность на 1 добавив новый ключ и значение.*/
-        if(!isExistingKey) {
+        if (lastNode == null) {
+            nodes[position] = newPair;
+        } else {
+            while (true) {
 
-            //Сохранием старые массивы ключей и значений.
-            previousKeys = keys;
-            previousValues = values;
-
-
-            capacity++;
-
-            //Создаем новые массивы для зранения ключей и значений.
-            keys = new Object[capacity];
-            values = new Object[capacity];
-
-            /*В случае если массивы были проинициализированны, то переписываем старые значения
-            в расширенные массивы.*/
-            if (previousKeys != null && previousValues != null) {
-
-                for (Object a : previousKeys) {
-                    keys[counter] = a;
-                    counter++;
+                if(lastNode.getKey().equals(newPair.getKey())){
+                    V oldVal = (V)lastNode.getValue();
+                    lastNode.setValue(newPair.getValue());
+                    return oldVal;
                 }
 
-
-                counter = 0;
-
-                for (Object a : previousValues) {
-                    values[counter] = a;
-                    counter++;
-                }
-            }
-
-            //Добавлем новые значение в массивы ключей и значений
-            keys[capacity - 1] = key;
-            values[capacity - 1] = value;
-        }
-        else {
-            /*В случае дубликата ключа, меняем значение ключа
-                    и возращаем старое значение.*/
-            return (V)changeValue(key, value);
-        }
-        counter = 0;
-        return null;
-    }
-
-    /**
-     * Method for getting value.
-     * @param key
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public V get(Object key){
-        int counter = 0;
-        if (containsKey(key)){
-            for(Object a : keys){
-                if(a.equals(key)){
-                    return (V) values[counter];
-                }
-                counter++;
-            }
-        }
-        else {
-            return null;
-        }
-        return null;
-    }
-
-    /**
-     * Method for keys deleting
-     * @param key
-     * @throws OutOfKeyException
-     */
-
-    @Override
-    public V remove(Object key){
-        previousKeys = keys;
-        previousValues = values;
-
-        int counter = 0;
-        int counter1 = 0;
-        int removingElement=0;
-        V removedValue= null;
-
-        if(containsKey(key)) {
-            capacity--;
-            for(Object a: keys) {
-
-                //Находим индекс удаляемого эллимента
-                if(a.equals(key)) {
-                    removingElement = counter;
+                if (lastNode.getNextElement() != null) {
+                    lastNode = lastNode.getNextElement();
+                } else {
+                    lastNode.setNextElement(newPair);
                     break;
                 }
-
-                counter++;
-            }
-
-            counter = 0;
-
-            //Создаем новые массивы
-            keys = new Object[capacity];
-            values = new Object[capacity];
-
-            //Наполняем массивы, без удаленного эллимента
-            for(Object a : previousKeys) {
-                if(counter!=removingElement){
-                    keys[counter1]=previousKeys[counter];
-                    counter1++;
-                }
-                counter++;
-            }
-
-            counter=0;
-            counter1=0;
-
-            for(Object a : previousValues) {
-                if(counter!=removingElement){
-                    values[counter1]=previousValues[counter];
-                    counter1++;
-                }
-                else{
-                    removedValue = (V) a;
-                }
-                counter++;
             }
         }
-        return removedValue;
+        return null;
     }
 
-    public Object[] getKeys(){
+    //@Override
+    public V get(Object key) {
+        int position = getIndex((K) key,nodes.length);
+            Node element = nodes[position];
+            if (element != null) {
+                while (true) {
+                    if(element.getKey().equals(key)) return (V) element.getValue();
+                    if (element.getNextElement() != null) {
+                        element = element.getNextElement();
+                    } else {
+                        if(element.getKey().equals(key)) return (V) element.getValue();
+                        break;
+                    }
+                }
+            }
+
+
+        return null;
+    }
+
+    //@Override
+    public V remove(Object key) {
+        int position = getIndex((K) key,nodes.length);
+
+            Node element = nodes[position];
+
+        if(element.getKey().equals(key)){
+            nodes[position] = element.getNextElement();
+            return (V) element.getValue();
+        }
+
+            if (element != null) {
+                while (true) {
+                    if (element.getNextElement() != null) {
+                        Node newElement = element.getNextElement();
+                        if(newElement.getKey().equals(key)){
+                            V value = (V)newElement.getValue();
+                            element.setNextElement(newElement.getNextElement());
+                            return value;
+                        }
+                        element = element.getNextElement();
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+        return null;
+    }
+
+
+    public Object[] getKeys() {
         return keys;
     }
 
-    public Object[] getValues(){
+    public Object[] getValues() {
         return values;
     }
 
-    @Override
+    //@Override
     public int size() {
         return keys.length;
     }
 
-    @Override
-    public void clear(){
+    // @Override
+    public void clear() {
         keys = null;
         values = null;
     }
 
-    @Override
+    // @Override
     public boolean isEmpty() {
-        if (values == null){
+        if (values == null) {
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
     /**
      * Method for checking key existing
+     *
      * @param key
      * @return
      */
-    @Override
-    public boolean containsKey(Object key){
-        if(keys == null){
+    //  @Override
+    public boolean containsKey(Object key) {
+        if (keys == null) {
             return false;
         }
         if (keys.length >= 1) {
@@ -200,8 +168,13 @@ public class HashMap<K,V>implements Map<K,V> {
         return false;
     }
 
+    private int getIndex(K key, int bucketLength) {
+        return key.hashCode() & (bucketLength - 1);
+    }
+
     /**
      * Меняет значение ключа на новое, возращает старое значение.
+     *
      * @param key
      * @param value
      * @return oldValue
@@ -233,16 +206,16 @@ public class HashMap<K,V>implements Map<K,V> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HashMap<?, ?> hashMap = (HashMap<?, ?>) o;
-        if(this.hashCode()!=o.hashCode()) return false;
+        if (this.hashCode() != o.hashCode()) return false;
 
         Object[] keys = ((HashMap<?, ?>) o).getKeys();
         Object[] values = ((HashMap<?, ?>) o).getValues();
 
-        for(Object a : this.keys){
-            counterB=0;
-            for(Object b : keys){
-                if(a.equals(b)){
-                    if(this.values[counterA].equals(values[counterB])){
+        for (Object a : this.keys) {
+            counterB = 0;
+            for (Object b : keys) {
+                if (a.equals(b)) {
+                    if (this.values[counterA].equals(values[counterB])) {
                         samePairs++;
                     }
                 }
@@ -252,17 +225,17 @@ public class HashMap<K,V>implements Map<K,V> {
         }
 
 
-        return samePairs==keys.length;
+        return samePairs == keys.length;
     }
 
     @Override
     public int hashCode() {
-        if(keys!=null && values!=null) {
+        if (keys != null && values != null) {
             int result = Objects.hash(capacity, counter);
             result = 31 * result + keys.length;
             result = 31 * result + values.length;
             return result;
-        }
-        else return 0;
+        } else return 0;
     }
+
 }

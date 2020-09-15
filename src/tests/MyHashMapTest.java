@@ -67,14 +67,8 @@ public class MyHashMapTest {
         resAct = new int[]{map.get("test4")};
         assertArrayEquals(resExp,resAct);
 
-        try {
-            map.remove("333");
-        }
-        catch (OutOfKeyException e){
-            String expectedMessage = e.getMessage();
-            String actualMessage = "Key doesn't exist";
-            assertTrue(expectedMessage.contains(actualMessage));
-        }
+        map.remove("333");
+
 
     }
 
