@@ -5,7 +5,6 @@ import java.util.*;
 public class HashMap<K,V> implements Map<K,V> {
 
     private Node<K,V>[] nodes = new Node[18];
-    private Map<? extends K, ? extends V> ;
 
     @Override
     public String toString(){
@@ -324,7 +323,7 @@ public class HashMap<K,V> implements Map<K,V> {
 
     @Override
     public int hashCode() {
-
+        return 0;
     }
 
     @Override
