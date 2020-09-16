@@ -1,15 +1,11 @@
 package mypackage;
 
-import exceptions.OutOfKeyException;
-
-import javax.naming.spi.ObjectFactoryBuilder;
-import java.nio.file.FileAlreadyExistsException;
-import java.security.KeyStore;
 import java.util.*;
 
 public class HashMap<K,V> implements Map<K,V> {
 
     private Node<K,V>[] nodes = new Node[18];
+    private Map<? extends K, ? extends V> ;
 
     @Override
     public String toString(){
@@ -143,19 +139,7 @@ public class HashMap<K,V> implements Map<K,V> {
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
 
-        Iterator it = m.entrySet().iterator();
-
-        while(it.hasNext()){
-            Map.Entry pair = (Entry) it.next();
-
-            V value = (V)pair.getValue();
-            K key = (K)pair.getValue();
-
-            this.put(key,value);
         }
-
-    }
-
     private Object[] getKeys() {
         int counter = 0;
 
@@ -245,23 +229,6 @@ public class HashMap<K,V> implements Map<K,V> {
         nodes  = new Node[18];
     }
 
-    @Override
-    public Set<K> keySet() {
-        return null;
-    }
-
-    @Override
-    public Collection<V> values() {
-        return null;
-    }
-
-    @Override
-    public Set<Entry<K, V>> entrySet() {
-
-        Set<Entry<K,V>> set = new HashSet<>();
-
-        return null;
-    }
 
     @Override
     public boolean isEmpty() {
@@ -357,13 +324,36 @@ public class HashMap<K,V> implements Map<K,V> {
 
     @Override
     public int hashCode() {
-//        if (keys != null && values != null) {
-//            int result = Objects.hash(capacity, counter);
-//            result = 31 * result + keys.length;
-//            result = 31 * result + values.length;
-//            return result;
-//        } else return 0;
-        return 0;
+
     }
 
+    @Override
+    public Set<Entry<K, V>> entrySet() {
+
+        Set<Entry<K,V>> set = new HashSet<>();
+
+        return null;
+    }
+
+    @Override
+    public Collection<V> values() {
+        HashSet<V> set = new HashSet<>();
+        Object[] values  = this.getValues();
+        for(int i = 0; i<values.length; i++){
+            set.add((V)values[i]);
+        }
+        return set;
+    }
+
+    @Override
+    public Set<K> keySet() {
+
+        Set<K> set = new HashSet<K>();
+        Object[] key = this.getKeys();
+
+        for(int i = 0; i<key.length;i++){
+            set.add((K)key[i]);
+        }
+        return set;
+    }
 }
