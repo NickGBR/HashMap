@@ -4,9 +4,9 @@ public class Node<K,V>{
     private int hash;
     private K key;
     private V value;
-    private Node nextElement;
+    private Node<K,V> nextElement;
 
-    public Node(int hash, K key, V value, Node nextElement) {
+    public Node(int hash, K key, V value, Node<K,V> nextElement) {
         this.hash = hash;
         this.key = key;
         this.value = value;
@@ -25,7 +25,7 @@ public class Node<K,V>{
         return value;
     }
 
-    public Node getNextElement() {
+    public Node<K,V> getNextElement() {
         return nextElement;
     }
 
@@ -41,7 +41,7 @@ public class Node<K,V>{
         this.value = value;
     }
 
-    public void setNextElement(Node nextElement) {
+    public void setNextElement(Node<K,V> nextElement) {
         this.nextElement = nextElement;
     }
 

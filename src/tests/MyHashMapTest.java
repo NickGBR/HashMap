@@ -33,7 +33,7 @@ public class MyHashMapTest {
     }
 
     @Test
-    public void get() throws OutOfKeyException{
+    public void get(){
         HashMap<String, Integer> map = new HashMap<>();
         map.put("test",1);
         map.put("test1",2);
@@ -48,7 +48,7 @@ public class MyHashMapTest {
     }
 
     @Test
-    public void remove() throws OutOfKeyException {
+    public void remove(){
         HashMap<String, Integer> map = new HashMap<>();
         map.put("test",1);
         map.put("test1",2);
@@ -67,7 +67,7 @@ public class MyHashMapTest {
         resAct = new int[]{map.get("test4")};
         assertArrayEquals(resExp,resAct);
 
-        map.remove("333");
+        map.remove("lol");
 
 
     }
