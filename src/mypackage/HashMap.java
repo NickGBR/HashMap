@@ -50,10 +50,11 @@ public class HashMap<K,V> implements Map<K,V> {
                         result = result + element.getKey().toString() + "=" + element.getValue().toString() + ", ";
                         element = element.getNextElement();
                     } else {
-                        result = result + element.getKey() + " " + element.getValue()  + " - bucket " + i + "\n";
+                        result = result + element.getKey() + "=" + element.getValue() + " - bucket " + i + "\n";
                         break;
                     }
                 }
+                result = result.replaceAll("\\{", "").replaceAll("}", "");
             }
         }
 
@@ -138,7 +139,14 @@ public class HashMap<K,V> implements Map<K,V> {
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
 
+        Iterator it = m.entrySet().iterator();
+
+        while(it.hasNext()) {
+            Map.Entry<K,V> pair = (Entry<K,V>)it.next();
+            this.put(pair.getKey(),pair.getValue());
         }
+    }
+
     private Object[] getKeys() {
         int counter = 0;
 
@@ -322,16 +330,30 @@ public class HashMap<K,V> implements Map<K,V> {
     }
 
     @Override
-    public int hashCode() {
-        return 0;
-    }
-
-    @Override
     public Set<Entry<K, V>> entrySet() {
+
+        Node <K,V> element;
 
         Set<Entry<K,V>> set = new HashSet<>();
 
-        return null;
+        for(Node<K,V> node:nodes){
+
+            if(node!=null){
+
+                set.add(node);
+
+                element=node.getNextElement();
+
+                while(true){
+                    if(element!=null){
+                        set.add(element);
+                        element=element.getNextElement();
+                    }
+                    else break;
+                }
+            }
+        }
+        return set;
     }
 
     @Override

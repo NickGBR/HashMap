@@ -1,6 +1,8 @@
 package mypackage;
 
-public class Node<K,V>{
+import java.util.Map;
+
+public class Node<K,V> implements Map.Entry<K,V> {
     private int hash;
     private K key;
     private V value;
@@ -17,12 +19,21 @@ public class Node<K,V>{
         return hash;
     }
 
+    @Override
     public K getKey() {
         return key;
     }
 
+    @Override
     public V getValue() {
         return value;
+    }
+
+    @Override
+    public V setValue(V value) {
+        V oldValue = value;
+        this.value = value;
+        return oldValue;
     }
 
     public Node<K,V> getNextElement() {
@@ -37,9 +48,6 @@ public class Node<K,V>{
         this.key = key;
     }
 
-    public void setValue(V value) {
-        this.value = value;
-    }
 
     public void setNextElement(Node<K,V> nextElement) {
         this.nextElement = nextElement;
