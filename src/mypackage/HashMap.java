@@ -4,7 +4,8 @@ import java.util.*;
 
 public class HashMap<K,V> implements Map<K,V> {
 
-    private Node<K,V>[] nodes = new Node[18];
+
+    private Node<K,V>[] nodes = new Node[16];
 
     @Override
     public String toString(){
