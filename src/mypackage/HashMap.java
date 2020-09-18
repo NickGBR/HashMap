@@ -28,11 +28,11 @@ public class HashMap<K,V> implements Map<K,V> {
                 }
             }
         }
-        if(!result.equals("{}")){
-            int endIndex = result.length()-2;
+        if (!result.equals("{}")){
+            int endIndex = result.length() - 2;
             result = result.trim();
             result = result.substring(2, endIndex);
-            result = "{"+result+"}";
+            result = "{" + result + "}";
         }
         return result;
     }
@@ -41,7 +41,7 @@ public class HashMap<K,V> implements Map<K,V> {
     public String toStringService() {
         String result = "{}";
 
-        for (int i = 0; i<nodes.length;i++) {
+        for (int i = 0; i < nodes.length; i++) {
             Node element = nodes[i];
             if (element != null) {
 
@@ -73,7 +73,7 @@ public class HashMap<K,V> implements Map<K,V> {
             while (true) {
 
                 if(lastNode.getKey().equals(newPair.getKey())){
-                    V oldVal = (V) lastNode.getValue();
+                    V oldVal = lastNode.getValue();
                     lastNode.setValue(newPair.getValue());
                     return oldVal;
                 }
@@ -95,11 +95,11 @@ public class HashMap<K,V> implements Map<K,V> {
         Node <K,V> element = nodes[position];
         if (element != null) {
             while (true) {
-                if(element.getKey().equals(key)) return element.getValue();
+                if (element.getKey().equals(key)) return element.getValue();
                 if (element.getNextElement() != null) {
                     element = element.getNextElement();
                 } else {
-                    if(element.getKey().equals(key)) return element.getValue();
+                    if (element.getKey().equals(key)) return element.getValue();
                     break;
                 }
             }
@@ -122,7 +122,7 @@ public class HashMap<K,V> implements Map<K,V> {
         while (true) {
             if (element.getNextElement() != null) {
                 Node newElement = element.getNextElement();
-                if(newElement.getKey().equals(key)){
+                if (newElement.getKey().equals(key)){
                     V value = (V)newElement.getValue();
                     element.setNextElement(newElement.getNextElement());
                     return value;
@@ -140,7 +140,7 @@ public class HashMap<K,V> implements Map<K,V> {
 
         Iterator it = m.entrySet().iterator();
 
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Map.Entry<K,V> pair = (Entry<K,V>)it.next();
             this.put(pair.getKey(),pair.getValue());
         }
@@ -148,7 +148,6 @@ public class HashMap<K,V> implements Map<K,V> {
 
     private Object[] getKeys() {
         int counter = 0;
-
         Object[] keys = new Object[this.size()];
         Node <K,V> element;
 
@@ -160,10 +159,10 @@ public class HashMap<K,V> implements Map<K,V> {
                 element=node.getNextElement();
 
                 while(true){
-                    if(element!=null){
+                    if(element != null){
 
-                        keys[counter]=element.getKey();
-                        element=element.getNextElement();
+                        keys[counter] = element.getKey();
+                        element = element.getNextElement();
 
                         counter++;
                     }
@@ -187,13 +186,13 @@ public class HashMap<K,V> implements Map<K,V> {
 
                 values[counter] = node.getValue();
                 counter++;
-                element=node.getNextElement();
+                element = node.getNextElement();
 
                 while(true){
-                    if(element!=null){
+                    if(element != null){
 
-                        values[counter]=element.getValue();
-                        element=element.getNextElement();
+                        values[counter] = element.getValue();
+                        element = element.getNextElement();
 
                         counter++;
                     }
@@ -210,13 +209,13 @@ public class HashMap<K,V> implements Map<K,V> {
         int counter = 0;
         Node <K,V> element;
         for(Node<K,V> node:nodes){
-            if(node!=null){
+            if(node != null){
                 counter++;
-                element=node.getNextElement();
+                element = node.getNextElement();
                 while(true){
-                    if(element!=null){
+                    if(element != null){
                         counter++;
-                        element=element.getNextElement();
+                        element = element.getNextElement();
                     }
                     else break;
                 }
@@ -234,7 +233,6 @@ public class HashMap<K,V> implements Map<K,V> {
     public void clear() {
         nodes  = new Node[18];
     }
-
 
     @Override
     public boolean isEmpty() {
@@ -261,14 +259,14 @@ public class HashMap<K,V> implements Map<K,V> {
         for (Node<K, V> node : nodes) {
             if (node != null) {
 
-                if(node.getKey().equals(key))return true;
+                if (node.getKey().equals(key)) return true;
 
                 element = node.getNextElement();
 
                 while (true) {
                     if (element != null) {
 
-                        if(element.getKey().equals(key)) return  true;
+                        if (element.getKey().equals(key)) return  true;
                         element = element.getNextElement();
                     } else break;
                 }
@@ -282,8 +280,8 @@ public class HashMap<K,V> implements Map<K,V> {
     @Override
     public boolean containsValue(Object value) {
         Object[] values = this.getValues();
-        for(Object value1 : values){
-            if(value.equals(value1)) return true;
+        for (Object value1 : values){
+            if (value.equals(value1)) return true;
         }
         return false;
     }
@@ -325,7 +323,7 @@ public class HashMap<K,V> implements Map<K,V> {
             }
         }
 
-        return counter==keys.length;
+        return counter == keys.length;
     }
 
     @Override
@@ -337,16 +335,15 @@ public class HashMap<K,V> implements Map<K,V> {
 
         for(Node<K,V> node:nodes){
 
-            if(node!=null){
+            if(node != null){
 
                 set.add(node);
 
                 element=node.getNextElement();
-
                 while(true){
-                    if(element!=null){
+                    if(element != null){
                         set.add(element);
-                        element=element.getNextElement();
+                        element = element.getNextElement();
                     }
                     else break;
                 }
