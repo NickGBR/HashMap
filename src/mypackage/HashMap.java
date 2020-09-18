@@ -2,6 +2,8 @@ package mypackage;
 
 import java.util.*;
 
+import static java.lang.Math.abs;
+
 public class HashMap<K,V> implements Map<K,V> {
 
 
@@ -46,9 +48,10 @@ public class HashMap<K,V> implements Map<K,V> {
             if (element != null) {
 
                 while (true) {
-
                     if (element.getNextElement() != null) {
-                        result = result + element.getKey().toString() + "=" + element.getValue().toString() + ", ";
+                        if(element.getKey() == null) result = result + "null" + "=" + element.getValue().toString() + ", ";
+                        else result = result + element.getKey().toString() + "=" + element.getValue().toString() + ", ";
+
                         element = element.getNextElement();
                     } else {
                         result = result + element.getKey() + "=" + element.getValue() + " - bucket " + i + "\n";
@@ -63,21 +66,36 @@ public class HashMap<K,V> implements Map<K,V> {
     }
 
     public V put(K key, V value) {
+
         int position = getIndex(key, nodes.length);
-        Node <K,V> newPair = new Node<>(key.hashCode(), key, value, null);
+        Node <K,V> newPair;
+
         Node <K,V> lastNode = nodes[position];
+
+        if(position == 0){
+            if(nodes[position]==null){
+                nodes[position] = new Node<>(0,null,value,null);
+                return null;
+            }
+            else {
+                V oldValue = nodes[position].getValue();
+                nodes[position].setValue(value);
+                return oldValue;
+            }
+        }
+
+        newPair = new Node<>(key.hashCode(), key, value, null);
 
         if (lastNode == null) {
             nodes[position] = newPair;
-        } else {
-            while (true) {
-
-                if(lastNode.getKey().equals(newPair.getKey())){
+        }
+        else {
+            while(true) {
+                if (lastNode.getKey().equals(newPair.getKey())) {
                     V oldVal = lastNode.getValue();
                     lastNode.setValue(newPair.getValue());
                     return oldVal;
                 }
-
                 if (lastNode.getNextElement() != null) {
                     lastNode = lastNode.getNextElement();
                 } else {
@@ -95,6 +113,9 @@ public class HashMap<K,V> implements Map<K,V> {
         Node <K,V> element = nodes[position];
         if (element != null) {
             while (true) {
+                if(key == null){
+                    return element.getValue();
+                }
                 if (element.getKey().equals(key)) return element.getValue();
                 if (element.getNextElement() != null) {
                     element = element.getNextElement();
@@ -114,6 +135,16 @@ public class HashMap<K,V> implements Map<K,V> {
         int position = getIndex((K) key,nodes.length);
 
         Node element = nodes[position];
+
+        if(element == null){
+            return null;
+        }
+
+        if(element.getKey() == null){
+            V oldValue = nodes[position].getValue();
+            nodes[position]=null;
+            return oldValue;
+        }
 
         if(element.getKey().equals(key)){
             nodes[position] = element.getNextElement();
@@ -137,6 +168,9 @@ public class HashMap<K,V> implements Map<K,V> {
 
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
+
+        if(m==null){
+        }
 
         Iterator it = m.entrySet().iterator();
 
@@ -287,7 +321,10 @@ public class HashMap<K,V> implements Map<K,V> {
     }
 
     private int getIndex(K key, int bucketLength) {
-        return key.hashCode() & (bucketLength - 1);
+        if(key==null){
+            return 0;
+        }
+        return abs(key.hashCode() % (bucketLength - 1))+1;
     }
 
     @Override

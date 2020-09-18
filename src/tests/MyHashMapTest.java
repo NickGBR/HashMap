@@ -4,6 +4,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import mypackage.HashMap;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public class MyHashMapTest {
@@ -68,8 +73,6 @@ public class MyHashMapTest {
         assertArrayEquals(resExp,resAct);
 
         map.remove("lol");
-
-
     }
 
     @Test
@@ -93,6 +96,38 @@ public class MyHashMapTest {
         assertEquals(testExp,testAct);
         assertEquals(test2Exp,test2Act);
         assertEquals(nickExp,nickAct);
+    }
+
+
+    @Test
+    public void putAll(){
+        HashMap<Integer,Integer> one = new HashMap<>();
+        HashMap<Integer,Integer> two = new HashMap<>();
+        HashMap<Integer,Integer> three = new HashMap<>();
+        HashMap<Integer,Integer> empty = new HashMap<>();
+
+        one.put(1,1);
+        one.put(2,1);
+        one.put(3,1);
+
+        two.put(2,1);
+        two.put(3,1);
+        two.put(1,1);
+
+        three.put(1,1);
+        three.put(2,2);
+        three.put(3,3);
+        three.put(4,4);
+
+        one.putAll(two);
+        one.putAll(three);
+        one.putAll(empty);
+
+        int[] resExp = new int[]{1,2,3,4};
+        int[] resAct = new int[]{one.get(1),one.get(2),one.get(3),one.get(4)};
+
+        assertTrue(Arrays.equals(resAct,resExp));
+
     }
 
     @Test

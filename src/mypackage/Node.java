@@ -9,8 +9,8 @@ public class Node<K,V> implements Map.Entry<K,V> {
     private Node<K,V> nextElement;
 
     public Node(int hash, K key, V value, Node<K,V> nextElement) {
-        this.hash = hash;
         this.key = key;
+        this.hash = hash;
         this.value = value;
         this.nextElement = nextElement;
     }
